@@ -11,21 +11,21 @@ SubjectTest <- fread(file.path(MainPath, "test", "subject_test.txt"))
 
 # #step 2, read actibity train and test
 
-ActivityTrain <- fread(file.path(MainPath, "train", "Y_train.txt"))
+ActivityTrain <- fread(file.path(MainPath, "train", "Y_train.txt"))  
 ActivityTest <- fread(file.path(MainPath, "test", "Y_test.txt"))
 
 ## step 3, read data train and test
 
-DataTrain <- fread(file.path(MainPath, "train", "X_train.txt"))
+DataTrain <- fread(file.path(MainPath, "train", "X_train.txt"))  
 DataTest <- fread(file.path(MainPath, "test", "X_test.txt"))
 
 ## step 4, merge all data
 
-AllSubject <- rbind(SubjectTrain, SubjectTest)
-setnames(AllSubject, "V1", "subject")
-AllActivity <- rbind(ActivityTrain, ActivityTest)
-setnames(AllActivity, "V1", "activityNum")
-AllData <- rbind(DataTrain, DataTest)
+AllSubject <- rbind(SubjectTrain, SubjectTest)  
+setnames(AllSubject, "V1", "subject")  
+AllActivity <- rbind(ActivityTrain, ActivityTest)  
+setnames(AllActivity, "V1", "activityNum")  
+AllData <- rbind(DataTrain, DataTest)  
 
 AllData <- cbind(AllData,cbind(AllSubject,AllActivity))
 
@@ -33,7 +33,7 @@ AllData <- cbind(AllData,cbind(AllSubject,AllActivity))
 
 ## step 1, read features
 
-Features <- fread(file.path(MainPath, "features.txt"))
+Features <- fread(file.path(MainPath, "features.txt"))  
 setnames(Features, names(Features), c("featureID", "featureName"))
 
 ## step 2, search for mean and std expression
@@ -73,9 +73,9 @@ TidySet <- mutate(Extract_Data,Sub_Act = paste(Extract_Data$subject,str_replace_
 TidySet <- select(TidySet,-(subject:activityName))
 
 # step 3: calculate the mean for each category
-TidySet <- t(sapply(split(TidySet,TidySet$Sub_Act), function(x) colMeans(x[,Features$featureName])))
+TidySet <- t(sapply(split(TidySet,TidySet$Sub_Act), function(x) colMeans(x[,Features$featureName])))  
 TidySet <- mutate(as.data.table(TidySet),Variable = names(as.data.frame(t(TidySet))))
 
 # step 4: Prepare the tidy data
-TidySet <- gather(TidySet,key = Sub_Act, value = Average, -Variable)
+TidySet <- gather(TidySet,key = Sub_Act, value = Average, -Variable)  
 TidySet <- separate(ck, col = Variable,into = c("Subject", "Activity"))
