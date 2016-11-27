@@ -1,6 +1,6 @@
 # TidySet-Project
 
-The code is made of 5 main parts which correspond to the required part in project description
+The code is made of 5 main parts which correspond to the required part in project description  
 
 ## PART 1: Merges the training and the test sets to create one data set.
 
@@ -25,7 +25,9 @@ In this step I read the measured train and test data and store them in "DataTrai
 DataTrain <- fread(file.path(MainPath, "train", "X_train.txt"))  
 DataTest <- fread(file.path(MainPath, "test", "X_test.txt"))
 
-### step 4, merge all data
+### step 4, merge all data  
+
+In this step I first combine the rows of each train and test data types and store them in "AllSubject", "AllActivity" and "AllData". Next I combine all the columns of the previous variables and store the merged data in "AllData".  
 
 AllSubject <- rbind(SubjectTrain, SubjectTest)  
 setnames(AllSubject, "V1", "subject")  
@@ -37,51 +39,80 @@ AllData <- cbind(AllData,cbind(AllSubject,AllActivity))
 
 ## PART 2: Extracts only the measurements on the mean and standard deviation for each measurement.
 
-### step 1, read features
+### step 1, read features  
+
+In this step I read the feautres and store it in "Features".  
 
 Features <- fread(file.path(MainPath, "features.txt"))  
-setnames(Features, names(Features), c("featureID", "featureName"))
+setnames(Features, names(Features), c("featureID", "featureName"))  
 
-### step 2, search for mean and std expression
+### step 2, search for mean and std expression  
 
-Features <- Features[grepl("mean\\(\\)|std\\(\\)", featureName)]
+In this step I filter the complete feature list by selecting the feastures which have mean and std in their expression. The results is stored in "Features".  
 
-### step 3, extract measurements on mean and standard deviation
+Features <- Features[grepl("mean\\(\\)|std\\(\\)", featureName)]  
 
-Extract_Data <- select(AllData,Features$featureID,subject,activityNum)
+### step 3, extract measurements on mean and standard deviation  
+
+In this step the new data according to the new features are selected from "AllData" and stored in "Extract_Data".  
+
+Extract_Data <- select(AllData,Features$featureID,subject,activityNum)  
 
 ## PART 3: Uses descriptive activity names to name the activities in the data set.
 
-### step 1, read activity names
+### step 1, read activity names  
 
-ActivityNames <- fread(file.path(MainPath, "activity_labels.txt"))
+In this step I read the activity label file and store it in "ActivityNames".  
 
-### step 2, make a new column with activity name
+ActivityNames <- fread(file.path(MainPath, "activity_labels.txt"))  
 
-Extract_Data <- mutate(Extract_Data,activityName = ActivityNames$V2[AllData$activityNum])
+### step 2, make a new column with activity name  
+
+In this step I insert the "ActivityNames" as a new coluomn to the "Extract_Data"  
+
+Extract_Data <- mutate(Extract_Data,activityName = ActivityNames$V2[AllData$activityNum])  
 
 
 ## PART 4: Appropriately labels the data set with descriptive activity names.
 
-### step 1, create set of currentlabels
-FeaturesCode <- Features[, paste0("V", Features$featureID)]
+### step 1, create set of currentlabels  
 
-### step 2, set new label with descriptive activity names
-setnames(Extract_Data,FeaturesCode,Features$featureName)
+In this step I prepare the string vector which contains the default feaure names of the data in "Extract_Data".  
+
+FeaturesCode <- Features[, paste0("V", Features$featureID)]  
+
+### step 2, set new label with descriptive activity names  
+
+In this step I replace the previous data label with the one from "Features$featureName" variable.  
+
+setnames(Extract_Data,FeaturesCode,Features$featureName)  
 
 
 ## PART 5: Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-### step 1: combine the subjet and activity column 
-TidySet <- mutate(Extract_Data,Sub_Act = paste(Extract_Data$subject,str_replace_all(Extract_Data$activityName, "_", ""),sep = "."))
+### step 1: combine the subjet and activity column  
 
-### step 2: remove the old subject and activity column
-TidySet <- select(TidySet,-(subject:activityName))
+In this step I fist combine the subject and activity name column into one single column. My goal is to be able to group all the data in "Extract_Data" into subgroups with unique sunject-avtivity identity. The new column is named "Sub_Act".  
 
-### step 3: calculate the mean for each category
+TidySet <- mutate(Extract_Data,Sub_Act = paste(Extract_Data$subject,str_replace_all(Extract_Data$activityName, "_", "_"),sep = "-"))  
+
+### step 2: remove the old subject and activity column  
+
+In this step I remove the previous separated subject and activityname column as they now appear toether in Sub_Act column.  
+
+TidySet <- select(TidySet,-(subject:activityName))  
+
+### step 3: calculate the mean for each category  
+
+In this step I calculate the mean of each subject-activity subgroup and subject-activity and store it in "TidySet". Next I convert the class of "TidySet" from matrix to data table. Since the variable names are missed in the conversion, I added them as a new column.  
+
 TidySet <- t(sapply(split(TidySet,TidySet$Sub_Act), function(x) colMeans(x[,Features$featureName])))  
-TidySet <- mutate(as.data.table(TidySet),Variable = names(as.data.frame(t(TidySet))))
+TidySet <- mutate(as.data.table(TidySet),Sub_Act = names(as.data.frame(t(TidySet))))
 
-### step 4: Prepare the tidy data
-TidySet <- gather(TidySet,key = Sub_Act, value = Average, -Variable)  
-TidySet <- separate(ck, col = Variable,into = c("Subject", "Activity"))
+### step 4: Prepare the tidy data  
+
+In the last step, I create a tidy data by gathering the column and finally separating the Sub_Act column into two separate columns.
+
+TidySet <- gather(TidySet,key = Variable, value = Average, -Sub_Act)  
+TidySet <- separate(TidySet, col = Sub_Act,into = c("Subject", "Activity"),sep = "-")  
+TidySet$Subject<-as.numeric(TidySet$Subject)
