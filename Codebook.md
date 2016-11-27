@@ -32,8 +32,8 @@ This file describes the variables in the run_analysis.R. In case one variable is
 
 | Variable           | Description        |
 | -------------------|:------------------:|
-|ActivityNames           | activity_labels.txt     |
-|Extract_Data      | with the activity name column added to the "Extract_Data" in Part 2   |
+|ActivityNames           |The data in activity_labels.txt     |
+|Extract_Data      | With the activity name column added to the "Extract_Data" in Part 2   |
 
 ### PART 4:
 
@@ -44,9 +44,9 @@ This file describes the variables in the run_analysis.R. In case one variable is
 ### PART 5:
 | Variable           | Description        |
 | -------------------|:------------------:|
-|TidySet (1)           | with a new "Sub-Act" column from combining "Subject" and "ActivityName" coloumn in "Extract_Data" in Part 3 |
-|TidySet (2)           | with deleted "Subject" and "ActivityName" columns from "TidyData (1)" |
-|TidySet (3)           | with average value for each "Sub_Act" value from "TidyData (2)" |
-|TidySet (4)           | with a new "Sub_Act" column added to "TidyData (3)" |
-|TidySet (5)           | with combined coluomns from "TidyData (4)" to make variables into one column|
-|TidySet (6)           | with separated "Sub_Act" column from "TidyData (5)" into to columns of "Subject" and "Activity"|
+|TidySet (1)           | With a new "Sub-Act" column from combining "Subject" and "ActivityName" coloumn in "Extract_Data" in Part 3 |
+|TidySet (2)           | With deleted "Subject" and "ActivityName" columns from "TidyData (1)" |
+|TidySet (3)           | With average value for each "Sub_Act" value from "TidyData (2)" |
+|TidySet (4)           | With a new "Sub_Act" column added to "TidyData (3)" |
+|TidySet (5)           | With combined coluomns from "TidyData (4)" to make variables into one column|
+|TidySet (6)           | With separated "Sub_Act" column from "TidyData (5)" into to columns of "Subject" and "Activity"|
