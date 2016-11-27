@@ -75,15 +75,18 @@ setnames(Extract_Data,FeaturesCode,Features$featureName)
 ##PART 5: Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
 #step 1: combine the subjet and activity column 
-TidySet <- mutate(Extract_Data,Sub_Act = paste(Extract_Data$subject,str_replace_all(Extract_Data$activityName, "_", ""),sep = "."))
+TidySet <- mutate(Extract_Data,Sub_Act = paste(Extract_Data$subject,str_replace_all(Extract_Data$activityName, "_", "_"),sep = "-"))
 
 #step 2: remove the old subject and activity column
 TidySet <- select(TidySet,-(subject:activityName))
 
 #step 3: calculate the mean for each category
 TidySet <- t(sapply(split(TidySet,TidySet$Sub_Act), function(x) colMeans(x[,Features$featureName])))
-TidySet <- mutate(as.data.table(TidySet),Variable = names(as.data.frame(t(TidySet))))
+TidySet <- mutate(as.data.table(TidySet),Sub_Act = names(as.data.frame(t(TidySet))))
 
 #step 4: Prepare the tidy data
-TidySet <- gather(TidySet,key = Sub_Act, value = Average, -Variable)
-TidySet <- separate(ck, col = Variable,into = c("Subject", "Activity"))
+TidySet <- gather(TidySet,key = Variable, value = Average, -Sub_Act)
+TidySet <- separate(TidySet, col = Sub_Act,into = c("Subject", "Activity"),sep = "-")
+
+TidySet$Subject<-as.numeric(TidySet$Subject)
+
