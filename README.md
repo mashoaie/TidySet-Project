@@ -6,7 +6,7 @@ The code is made of 5 main parts which correspond to the required part in projec
 
 ## Step 1: read subject train and test:
 
-SubjectTrain <- fread(file.path(MainPath, "train", "subject_train.txt"))\n
+SubjectTrain <- fread(file.path(MainPath, "train", "subject_train.txt"))  
 SubjectTest <- fread(file.path(MainPath, "test", "subject_test.txt"))
 
 # #step 2, read actibity train and test
