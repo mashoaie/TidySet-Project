@@ -44,7 +44,7 @@ This file describes the variables in the run_analysis.R. In case one variable is
 ### PART 5:
 | Variable           | Description        |
 | -------------------|:------------------:|
-|TidySet (1)           | With a new "Sub-Act" column from combining "Subject" and "ActivityName" coloumn in "Extract_Data" in Part 3 |
+|TidySet (1)           | With a new "Sub-Act" column from combining "Subject" and "ActivityName" column in "Extract_Data" in Part 3 |
 |TidySet (2)           | With deleted "Subject" and "ActivityName" columns from "TidyData (1)" |
 |TidySet (3)           | With average value for each "Sub_Act" value from "TidyData (2)" |
 |TidySet (4)           | With a new "Sub_Act" column added to "TidyData (3)" |
