@@ -4,15 +4,15 @@ The code is made of 5 main parts which correspond to the required part in projec
 
 ## PART 1: Merges the training and the test sets to create one data set.
 
-### Step 1: read subject train and test:
+### Step 1: read subject train and test:  
 #In this step I read the subject train and test data and store them in "SubjectTrain" and "SubjectTest".  
 #I assumed the wirking directory is the main data folder. In my case the working directory is: C:\Users\Amin\Documents\My R\UCI HAR Dataset  
 
 SubjectTrain <- fread(file.path(MainPath, "train", "subject_train.txt"))  
 SubjectTest <- fread(file.path(MainPath, "test", "subject_test.txt"))
 
-### step 2, read actibity train and test
-##In this step I read the activity train and test data and store them in "ActivityTrain" and "ActivityTest".  
+### step 2, read actibity train and test  
+#In this step I read the activity train and test data and store them in "ActivityTrain" and "ActivityTest".  
 
 ActivityTrain <- fread(file.path(MainPath, "train", "Y_train.txt"))  
 ActivityTest <- fread(file.path(MainPath, "test", "Y_test.txt"))
